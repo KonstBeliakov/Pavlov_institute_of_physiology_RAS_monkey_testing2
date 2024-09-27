@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout, QComboBox
 
-from experiment_settings1 import ExperimentSettings1
+from experiment_windows import ExperimentSettings1, ExperimentSettings2, ExperimentSettings3
 
 
 class MainWindow(QWidget):
@@ -12,16 +12,23 @@ class MainWindow(QWidget):
 
         self.layout = QVBoxLayout()
 
-        self.label = QLabel('Hello, click the button!', self)
-        self.layout.addWidget(self.label)
+        self.combo_box = QComboBox(self)
+        self.combo_box.addItems(["DNMS", "Extrapolation", "Memory volume"])
+        self.layout.addWidget(self.combo_box)
 
-        self.button = QPushButton('Click Me', self)
-        self.button.clicked.connect(self.on_button_click)  # Connect button click to method
+        self.button = QPushButton('Open settings window', self)
+        self.button.clicked.connect(self.on_button_click)
         self.layout.addWidget(self.button)
 
         self.setLayout(self.layout)
 
     def on_button_click(self):
-        self.label.setText('Button Clicked!')
-        self.experiment_window = ExperimentSettings1()
+        match self.combo_box.currentText():
+            case 'DNMS':
+                self.experiment_window = ExperimentSettings1()
+            case 'Extrapolation':
+                self.experiment_window = ExperimentSettings2()
+            case 'Memory volume':
+                self.experiment_window = ExperimentSettings3()
+
         self.experiment_window.show()

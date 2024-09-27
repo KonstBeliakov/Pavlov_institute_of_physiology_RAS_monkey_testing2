@@ -1,6 +1,6 @@
 import json
 import pickle
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, astuple, asdict
 from enum import Enum
 from datetime import datetime
 import os
