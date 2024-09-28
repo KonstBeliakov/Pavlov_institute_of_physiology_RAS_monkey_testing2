@@ -1,0 +1,3 @@
+from experiment_settings_windows.experiment_settings1 import ExperimentSettings1
+from experiment_settings_windows.experiment_settings2 import ExperimentSettings2
+from experiment_settings_windows.experiment_settings3 import ExperimentSettings3
