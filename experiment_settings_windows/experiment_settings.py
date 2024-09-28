@@ -1,10 +1,12 @@
 import sys
+from copy import deepcopy
 from dataclasses import astuple, asdict
 
 from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout, QComboBox, QLineEdit, QRadioButton, QApplication, \
-    QHBoxLayout, QMainWindow, QFileDialog
+    QHBoxLayout, QMainWindow, QFileDialog, QGridLayout
 
-from settings import Settings, Settings1
+import settings
+from settings import Settings, Settings1, Settings2, Settings3, CommonSettings
 
 
 class ExperimentSettings(QMainWindow):
@@ -19,12 +21,17 @@ class ExperimentSettings(QMainWindow):
 
         self.line_edit = []
 
-        for attr, value in asdict(self.settings).items():
-            self.label = QLabel(str(attr), self)
-            self.main_layout.addWidget(self.label)
+        grid_layout = QGridLayout()
 
-            self.line_edit.append(QLineEdit(self))
-            self.main_layout.addWidget(self.line_edit[-1])
+        for i, (attr, value) in enumerate(asdict(self.settings).items()):
+            if str(attr) in self.settings.settings_names:
+                self.label = QLabel(self.settings.settings_names[str(attr)], self)
+                grid_layout.addWidget(self.label, i, 0)
+
+                self.line_edit.append(QLineEdit(self))
+                grid_layout.addWidget(self.line_edit[-1], i, 1)
+
+        self.main_layout.addLayout(grid_layout)
 
         self.update_data()
 
@@ -53,10 +60,25 @@ class ExperimentSettings(QMainWindow):
         self.close()
 
     def apply_settings(self):
-        pass
+        print('apply settings method was called')
+        for i, (attr, value) in enumerate(asdict(self.settings).items()):
+            # Should check type of value and transform string to it somehow
+            self.settings.__dict__[attr] = self.line_edit[i].text()
+            # break the for loop if values are wrong
+        else:
+            match type(self.settings):
+                case settings.Settings1:
+                    settings.current_settings1 = deepcopy(self.settings)
+                case settings.Settings2:
+                    settings.current_settings2 = deepcopy(self.settings)
+                case settings.Settings3:
+                    settings.current_settings3 = deepcopy(self.settings)
+                case settings.CommonSettings:
+                    settings.current_common_settings = deepcopy(self.settings)
 
     def update_data(self):
-        for i, (attr, value) in enumerate(asdict(self.settings).items()):
+        items_with_descriptions = [(i, j) for i, j in asdict(self.settings).items() if str(i) in self.settings.settings_names]
+        for i, (attr, value) in enumerate(items_with_descriptions):
             self.line_edit[i].setText(str(value))
 
     def import_settings(self):
@@ -83,10 +105,3 @@ class ExperimentSettings(QMainWindow):
 
     def load_settings(self, filename=None):
         self.settings.load(filename)
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = ExperimentSettings(settings=Settings1())
-    window.show()
-    sys.exit(app.exec_())

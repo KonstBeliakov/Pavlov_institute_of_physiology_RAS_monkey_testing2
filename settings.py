@@ -8,6 +8,7 @@ import os
 
 @dataclass
 class Settings:
+    settings_names: dict = field(init=False, repr=False, default_factory=dict)
     filename: str = field(init=False, default=f'settings/default_settings')
 
     def __post_init__(self):
@@ -101,6 +102,26 @@ class RightImage(Enum):
 
 @dataclass
 class Settings1(Settings):
+    settings_names: dict = field(init=False, repr=False, default_factory=lambda: {
+            #'filename': 'Название файла с настройками' ,
+            'delays': 'Задержки в эксперименте',
+            'barrier_delay': 'Время работы заслонки',
+            'session_number': 'Количество сессий в эксперименте',
+            'repeat_number': 'Количество тестов сессии',
+            'restart_after_answer': 'Перезапускать после неправильного ответа',
+            'image_size': 'Размер изображения',
+            'distance_between_images': 'Расстояние между изображениями',
+            'display_target_image_twice': 'Выводить стартовое изображение дважды',
+            'mix_delays': 'Перемешивать задержки',
+            'correct_answer_percentage': 'Процент правильных ответов в левой части экрана',
+            'equalize_correct_answers_by_delays': 'Уравнять правильные ответы по задержкам',
+            'right_image': 'Правильное изображение',
+            'experiment_directory': 'Папка с файлами для эксперимента',
+            #'log_header': 'Заголовок лога',
+            'current_log_header': 'Текущий заголовок лога',
+            'used_images_behaviour': 'Что делать с использованными изображениями',
+            'used_images_directory': 'Папка для перемещения использованных изображений',
+        })
     filename: str = field(init=False, default=f'settings/default_experiment1_settings')
     delays: list[str] = field(default_factory=lambda: [1.0, [1.0], 1.0, 0.0, 5.0, 0, 0])
     barrier_delay: float = 0.0
@@ -123,6 +144,10 @@ class Settings1(Settings):
     current_log_header: list[str] = None
     used_images_behaviour: UsedImagesBehavior = UsedImagesBehavior.IGNORE
     used_images_directory: str = 'used_images'
+
+    def __post_init__(self):
+        super().__post_init__()
+        setattr(self.__class__, 'settings_name', field(default='Default description'))
 
 
 class MovementDirection(Enum):
@@ -169,25 +194,24 @@ class Settings3(Settings):
     current_log_header: list[str] = None
 
 
-if __name__ == '__main__':
-    common_settings = CommonSettings()
-    s1 = Settings1()
-    s2 = Settings2()
-    s3 = Settings3()
+current_common_settings = CommonSettings()
+current_settings1 = Settings1()
+current_settings2 = Settings2()
+current_settings3 = Settings3()
 
+if __name__ == '__main__':
     print('-----CommonSettings-----')
-    print(common_settings)
+    print(current_common_settings)
     print('------------------------')
     print()
     print('-----Settings1-----')
-    print(s1)
+    print(current_settings1)
     print('-------------------')
     print()
     print('-----Settings2-----')
-    print(s2)
+    print(current_settings2)
     print('-------------------')
     print()
     print('-----Settings3-----')
-    print(s3)
+    print(current_settings3)
     print('-------------------')
-
