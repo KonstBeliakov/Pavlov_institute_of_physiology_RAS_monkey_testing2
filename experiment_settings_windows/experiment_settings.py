@@ -2,7 +2,7 @@ import sys
 from dataclasses import astuple, asdict
 
 from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout, QComboBox, QLineEdit, QRadioButton, QApplication, \
-    QHBoxLayout, QMainWindow
+    QHBoxLayout, QMainWindow, QFileDialog
 
 from settings import Settings, Settings1
 
@@ -17,12 +17,16 @@ class ExperimentSettings(QMainWindow):
 
         self.main_layout = QVBoxLayout()
 
+        self.line_edit = []
+
         for attr, value in asdict(self.settings).items():
             self.label = QLabel(str(attr), self)
             self.main_layout.addWidget(self.label)
 
-            self.line_edit = QLineEdit(self)
-            self.main_layout.addWidget(self.line_edit)
+            self.line_edit.append(QLineEdit(self))
+            self.main_layout.addWidget(self.line_edit[-1])
+
+        self.update_data()
 
         button_layout = QHBoxLayout()
 
@@ -51,11 +55,28 @@ class ExperimentSettings(QMainWindow):
     def apply_settings(self):
         pass
 
+    def update_data(self):
+        for i, (attr, value) in enumerate(asdict(self.settings).items()):
+            self.line_edit[i].setText(str(value))
+
     def import_settings(self):
-        pass
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getOpenFileName(self,
+                                                  "Открыть файл",
+                                                  "",
+                                                  "Все файлы (*.*);;Текстовые файлы (*.txt)",
+                                                  options=options)
+        self.load_settings(filename)
+        self.update_data()
 
     def export_settings(self):
-        pass
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getSaveFileName(self,
+                                                  "Сохранить файл как",
+                                                  "",
+                                                  "Текстовые файлы (*.txt);;Все файлы (*.*)",
+                                                  options=options)
+        self.save_settings(filename=filename)
 
     def save_settings(self, filename=None):
         self.settings.save(filename)
