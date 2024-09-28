@@ -8,7 +8,7 @@ import os
 
 @dataclass
 class Settings:
-    filename: str = field(init=False, default=f'settings/default_settings.json')
+    filename: str = field(init=False, default=f'settings/default_settings')
 
     def __post_init__(self):
         if os.path.exists(self.filename):
@@ -56,7 +56,7 @@ class Settings:
 
 @dataclass
 class CommonSettings(Settings):
-    filename: str = field(init=False, default=f'settings/default_common_settings.json')
+    filename: str = field(init=False, default=f'settings/default_common_settings')
     fullscreen_mode: bool = True
     bg_color: str = '#fff'
     monitor_copy_size: float = 0.1
@@ -101,7 +101,7 @@ class RightImage(Enum):
 
 @dataclass
 class Settings1(Settings):
-    filename: str = field(init=False, default=f'settings/default_experiment1_settings.json')
+    filename: str = field(init=False, default=f'settings/default_experiment1_settings')
     delays: list[str] = field(default_factory=lambda: [1.0, [1.0], 1.0, 0.0, 5.0, 0, 0])
     barrier_delay: float = 0.0
     session_number: int = 1

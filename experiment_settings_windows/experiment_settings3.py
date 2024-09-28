@@ -1,4 +1,4 @@
-from experiment_windows.experiment_settings import ExperimentSettings
+from experiment_settings_windows.experiment_settings import ExperimentSettings
 from settings import *
 
 

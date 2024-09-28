@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout, QComboBox
 
-from experiment_windows import ExperimentSettings1, ExperimentSettings2, ExperimentSettings3
+from experiment_settings_windows import ExperimentSettings1, ExperimentSettings2, ExperimentSettings3
 
 
 class MainWindow(QWidget):

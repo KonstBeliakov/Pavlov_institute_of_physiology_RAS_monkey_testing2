@@ -1,3 +1,3 @@
-from experiment_windows.experiment_settings1 import ExperimentSettings1
-from experiment_windows.experiment_settings2 import ExperimentSettings2
-from experiment_windows.experiment_settings3 import ExperimentSettings3
+from experiment_windows.experiment_window1 import ExperimentWindow1
+from experiment_windows.experiment_window2 import ExperimentWindow2
+from experiment_windows.experiment_window3 import ExperimentWindow3
